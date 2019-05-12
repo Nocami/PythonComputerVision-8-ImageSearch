@@ -8,16 +8,16 @@
 而且在其他别的地方包含很多0元素。由于其忽略了单词出现的顺序及位置，该模型也被称为BOW表示模型。  
 通过单词计数来构建文档直方图向量v，从而建立文档索引。通常，数据集中一个单词的重要性与它在文档中出现的次数成正比，而与它在语料库中出现的次数成反比。  
 最常用的权重是tf-idf（tern frequency-inverse document frequency，词频-逆向文档频率），单词w在文档d中的词频是:  
-![image](01.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/01.jpg)  
 逆向文件频率 (inverse document frequency, IDF)  IDF的主要思想是：如果包含词条t的文档越少, IDF越大，则说明词条具有很好的类别区分能力。某一特定词语的IDF，可以由总文件数目除以包含该词语之文件的数目，再将得到的商取对数得到。  
-![image](02.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/02.jpg)  
 某一特定文件内的高词语频率，以及该词语在整个文件集合中的低文件频率，可以产生出高权重的TF-IDF。因此，TF-IDF倾向于过滤掉常见的词语，保留重要的词语。  
-![image](03.jpg)   
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/03.jpg)   
 ## 二.视觉单词
 将文本挖掘技术应用到图像中，首先需要建立等效视觉单词，可以用之前博文中提到的SIFT局部描述子做到。它的思想是将描述子空间量化成一些典型实例，并将图像中的每个描述子指派到其中的某个实例中。这些典型实例可以通过分析训练图像集确定，并被视为视觉单词。所有这些视觉单词构成的集合称为**视觉词汇**，有时也称为**视觉码本**。  
 ### 1.BOW模型
 从一个很大的训练图像提取特征描述子，利用一些聚类算法可以构建出视觉单词。聚类算法最常用的是**K-means**，这里也采用K-means。视觉单词并不抽象，它只是在给定特殊描述子空间中的一组向量集，在采用K-means进行聚类时得到的视觉单词时聚类质心。用视觉单词直方图来表示图像，则该模型称为BOW模型。这里展示一个示例数据集，用它可以说明BOW概念。文件first1000.zip包含了肯塔基大学物体识别数据集（ukbench）的前1000幅图片，完整数据集及配套代码可以去 http://www.bis.uky.edu/~stewe/ukbench/ 找到。这个数据集有很多子集，每个子集包括四幅图像，具有相同的场景或物体，而且存储的文件名时连续的。如下图所示：  
-![image](04.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/04.jpg)  
 ### 2.创建词汇
 为创建视觉单词词汇，我们需要提取特征描述子，这里，使用之前博文中介绍过的SIFT特征描述子。imlist包含的是图像的文件名，运行相应的代码（后文给出），可以得到每幅图的描述子，并且将每幅图像的描述子保存在一个文件中。创建一个Vocabulary类，其中包含了一个由单词聚类中心VOC与每个单词对应的逆向文档频率构成的向量，为了在某些图像集上训练词汇，train()方法获取包含有.sift后缀的描述子文件列表和词汇单词数k.在K-means聚类阶段可以对训练数据下采样，因为如果使用过多特征，会耗费很长时间。现在在计算机的某个文件夹中，保存了图像及提取出来的sift特征文件，利用pickle模块保存整个词汇对象以便后面使用。  
 ## 三.图像索引
@@ -75,8 +75,8 @@ with open('first1000/vocabulary.pkl', 'wb') as f:
 print ('vocabulary is:', voc.name, voc.nbr_words)
 ~~~  
 这里用的数据集是之前下载的data文件夹中的 ﬁrst1000 数据集，里面有1000张图片，建议把这个数据集文件整个 放到要运行的代码的当前目录下，比较方便，且不容易出错：这个过程很缓慢，根据机器配置不同，需要10-30分钟时间。  
-![image](1.JPG)  
-![image](2.JPG)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/1.JPG)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/2.JPG)  
 #### 2)将模型数据导入数据库
 ~~~python
 # -*- coding: utf-8 -*-
@@ -115,7 +115,7 @@ print (con.execute('select * from imlist').fetchone())
 
 ~~~  
 运行后，会生成相应文件：   
-![image](5.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/5.jpg)  
 #### 3).索引测试
 将数据放进数据库中之后就可以开始测试我们的图片索引。
 下面直接上代码：  
@@ -187,8 +187,8 @@ imagesearch.plot_results(src,res_reg[:8]) #常规查询
 imagesearch.plot_results(src,res_geom[:8]) #重排后的结果
 ~~~
 执行完后会出现两张图片:  
-![image](3.JPG)  
-![image](4.JPG)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/3.JPG)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/4.JPG)  
 #### 4).建立Demo和Web应用  
 安装CherryPy包后，直接运行下述代码：  
 ~~~python
@@ -290,7 +290,7 @@ cherrypy.quickstart(SearchDemo(), '/', config=os.path.join(os.path.dirname(__fil
 ~~~  
 
 运行这个代码首先需要配置 service.conf文件：  
-![image](6.JPG)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/6.JPG)  
 内容如下：  
 ~~~
 [global] 
@@ -307,9 +307,9 @@ tools.staticdir.dir = ""
 最后我们运行的时候会将我们设置的图库的地址（也就是 E:/Study/pythonProject/ch07） 和我们保存在数据库中的地址（ﬁrst1000/xxx.jpg）连接起来，用于显示图片。
 最后效果类似于这样
 打开我们的浏览器，输入相应端口：  
-![image](7.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/7.jpg)  
 就会显示我们的Web搜索引擎：  
-![image](8.jpg)  
-![image](9.jpg)  
-![image](10.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/8.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/9.jpg)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/10.jpg)  
 第一张图是随机选择了一些图像，下面是两个查询示例：页面内最左边为查询原图，之后是结果靠前的图像。
