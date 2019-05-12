@@ -290,7 +290,7 @@ cherrypy.quickstart(SearchDemo(), '/', config=os.path.join(os.path.dirname(__fil
 ~~~  
 
 运行这个代码首先需要配置 service.conf文件：  
-![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/6.JPG)  
+![image](https://github.com/Nocami/PythonComputerVision-7-ImageSearch/blob/master/image/6.jpg)  
 内容如下：  
 ~~~
 [global] 
